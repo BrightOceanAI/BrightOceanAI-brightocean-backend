@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class DiagnosticoController {
                     content = @Content(schema = @Schema(implementation = Diagnostico.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao cadastrar fotografia")})
     @PostMapping
-    public ResponseEntity createDiagnostico(@RequestBody CriarDiagnosticoDTO diagnosticodto) {
+    public ResponseEntity createDiagnostico(@RequestBody @Valid CriarDiagnosticoDTO diagnosticodto) {
         try {
             DetalharDiagnosticoDTO createdDiagnostico = service.criarDiagnostico(diagnosticodto);
             return new ResponseEntity<>(createdDiagnostico, HttpStatus.CREATED);
@@ -70,7 +71,7 @@ public class DiagnosticoController {
                     content = @Content(schema = @Schema(implementation = Diagnostico.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao alterar diagnostico")})
     @PutMapping("/{id}")
-    public ResponseEntity updateDiagnostico(@PathVariable("id") Long id, @RequestBody AlterarDiagnosticoDTO diagnosticoDTO) {
+    public ResponseEntity updateDiagnostico(@PathVariable("id") Long id, @RequestBody @Valid AlterarDiagnosticoDTO diagnosticoDTO) {
         try{
             Diagnostico updatedDiagnostico = service.alterarDiagnostico(id, diagnosticoDTO);
             return new ResponseEntity<>(updatedDiagnostico, HttpStatus.OK);

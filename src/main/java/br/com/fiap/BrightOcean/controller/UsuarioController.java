@@ -14,9 +14,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class UsuarioController {
         try {
             DetalhamentoUsuarioDTO usuario = usuarioService.cadastrarUsuario(cadastroUsuarioDTO);
             return ResponseEntity.status(201).body(usuario);
-        }catch (Exception | BusinessException e){
+        }catch (Exception | BusinessException e) {
             error.setError(e.getMessage());
             return ResponseEntity.status(400).body(error);
         }
@@ -74,7 +77,7 @@ public class UsuarioController {
                     content = @Content(schema = @Schema(implementation = Usuario.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao buscar usuário")})
     @GetMapping("/email/{email}")
-    public ResponseEntity buscarPorEmail(@PathVariable String email){
+    public ResponseEntity buscarPorEmail(@PathVariable @Email String email){
         try {
             Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
             return ResponseEntity.status(200).body(usuario);

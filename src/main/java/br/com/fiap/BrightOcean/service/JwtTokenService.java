@@ -6,6 +6,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,14 +16,17 @@ import java.time.ZonedDateTime;
 @Service
 public class JwtTokenService {
 
-    protected static final String SECRET_KEY = "4Z^XrroxR@dWxqf$mTTKwW$!@#qGr4P";
-    protected static final String ISSUER = "pizzurg-api";
+    @Value("${jwt.token.secret-key}")
+    private String secret_key;
+
+    @Value("${jwt.token.issuer}")
+    private String issuer;
 
     public String generateToken(Usuario usuario) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            Algorithm algorithm = Algorithm.HMAC256(this.secret_key);
             return JWT.create()
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .withIssuedAt(creationDate())
                     .withExpiresAt(expirationDate())
                     .withSubject(usuario.getEmail())
@@ -34,9 +38,9 @@ public class JwtTokenService {
 
     public String getSubjectFromToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            Algorithm algorithm = Algorithm.HMAC256(secret_key);
             return JWT.require(algorithm)
-                    .withIssuer(ISSUER)
+                    .withIssuer(issuer)
                     .build()
                     .verify(token)
                     .getSubject();

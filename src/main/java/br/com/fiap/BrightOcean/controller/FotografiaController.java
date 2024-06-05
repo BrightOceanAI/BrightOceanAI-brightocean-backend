@@ -33,7 +33,10 @@ public class FotografiaController {
                     content = @Content(schema = @Schema(implementation = Fotografia.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao cadastrar fotografia")})
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity registrarFoto(@RequestParam("image")MultipartFile image, @RequestParam("idCamera") Long idCamera) {
+    public ResponseEntity registrarFoto(
+            @RequestParam(value = "image", required = true) MultipartFile image,
+            @RequestParam(value = "idCamera", required = true) Long idCamera
+    ) {
         try {
             DetalharFotografiaDTO createdFotografia = service.criarFotografia(image, idCamera);
             return new ResponseEntity<>(createdFotografia, HttpStatus.CREATED);

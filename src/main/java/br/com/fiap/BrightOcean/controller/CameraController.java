@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CameraController {
                     content = @Content(schema = @Schema(implementation = Camera.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao cadastrar câmera")})
     @PostMapping
-    public ResponseEntity createCamera(@RequestBody CriarCameraDTO cameradto) {
+    public ResponseEntity createCamera(@RequestBody @Valid CriarCameraDTO cameradto) {
         try {
             Camera createdCamera = service.criarCamera(cameradto);
             return new ResponseEntity<>(createdCamera, HttpStatus.CREATED);
@@ -75,7 +76,7 @@ public class CameraController {
                     content = @Content(schema = @Schema(implementation = Camera.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao alterar câmera")})
     @PutMapping("/{id}")
-    public ResponseEntity updateCamera(@PathVariable("id") Long id, @RequestBody AlterarCameraDTO cameraDTO) {
+    public ResponseEntity updateCamera(@PathVariable("id") Long id, @RequestBody @Valid AlterarCameraDTO cameraDTO) {
         try{
             Camera updatedCamera = service.alterarCamera(id, cameraDTO);
             return new ResponseEntity<>(updatedCamera, HttpStatus.OK);

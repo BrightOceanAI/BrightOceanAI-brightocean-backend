@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class RecifeController {
                     content = @Content(schema = @Schema(implementation = Recife.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao cadastrar recife")})
     @PostMapping
-    public ResponseEntity createRecife(@RequestBody CriarRecifeDTO recifedto) {
+    public ResponseEntity createRecife(@RequestBody @Valid CriarRecifeDTO recifedto) {
         try {
             Recife createdRecife = service.criarRecife(recifedto);
             return new ResponseEntity<>(createdRecife, HttpStatus.CREATED);
@@ -69,7 +70,7 @@ public class RecifeController {
                     content = @Content(schema = @Schema(implementation = Recife.class))),
             @ApiResponse(responseCode = "400", description = "Erro ao alterar recife")})
     @PutMapping("/{id}")
-    public ResponseEntity updateRecife(@PathVariable("id") Long id, @RequestBody AlterarRecifeDTO recifeDTO) {
+    public ResponseEntity updateRecife(@PathVariable("id") Long id, @RequestBody @Valid AlterarRecifeDTO recifeDTO) {
         try{
             Recife updatedRecife = service.alterarRecife(id, recifeDTO);
             return new ResponseEntity<>(updatedRecife, HttpStatus.OK);
