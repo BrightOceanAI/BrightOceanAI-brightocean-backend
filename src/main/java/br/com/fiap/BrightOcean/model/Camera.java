@@ -19,7 +19,7 @@ public class Camera {
     private String modeloCamera;
     private String localizacao;
     private float latitude;
-    private float longitude;    
+    private float longitude;
 
     public Camera(CriarCameraDTO cameraDto) {
         this.modeloCamera = cameraDto.modeloCamera();
