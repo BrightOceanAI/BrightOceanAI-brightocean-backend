@@ -40,7 +40,7 @@ public class CameraService {
 
     public Camera alterarCamera(Long id, AlterarCameraDTO cameraDTO) throws BusinessException {
         if (cameraRepository.existsById(id)) {
-            Camera camera = new Camera();
+            Camera camera = cameraRepository.getReferenceById(id);
             camera.atualizarCamera(cameraDTO);
             return cameraRepository.save(camera);
         } else {
