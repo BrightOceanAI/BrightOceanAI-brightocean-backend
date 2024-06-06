@@ -29,9 +29,9 @@ public class Diagnostico {
     @ManyToOne
     private Recife recife;
 
-    public Diagnostico(CriarDiagnosticoDTO diagnosticoDto, Fotografia fotografia, Recife recife) {
-        this.saude = diagnosticoDto.saude();
-        this.dataDiagnostico = diagnosticoDto.dataDiagnostico();
+    public Diagnostico(Saude saude, Fotografia fotografia, Recife recife) {
+        this.saude = saude;
+        this.dataDiagnostico = LocalDate.now();
         this.fotografia = fotografia;
         this.recife = recife;
     }

@@ -1,19 +1,16 @@
 package br.com.fiap.BrightOcean.dto.camera;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 public record CriarCameraDTO(
 
         @NotNull
         @NotBlank
-        @Min(3)
+        @Size(min = 3, max = 100)
         String modeloCamera,
         @NotNull
         @NotBlank
-        @Max(100)
+        @Size(min = 3, max = 100)
         String localizacao,
         @NotNull
         Float latitude,

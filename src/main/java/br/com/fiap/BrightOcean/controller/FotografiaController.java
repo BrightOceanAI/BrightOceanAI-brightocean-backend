@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,7 @@ public class FotografiaController {
     public ResponseEntity registrarFoto(
             @RequestParam(value = "image", required = true) MultipartFile image,
             @RequestParam(value = "idCamera", required = true) Long idCamera
-    ) {
+    ) throws IOException {
         try {
             DetalharFotografiaDTO createdFotografia = service.criarFotografia(image, idCamera);
             return new ResponseEntity<>(createdFotografia, HttpStatus.CREATED);

@@ -15,8 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+    import java.util.Optional;
 
 @Service
 public class DiagnosticoService {
@@ -34,7 +33,10 @@ public class DiagnosticoService {
         try {
             Fotografia fotografia = fotografiaRepository.getReferenceById(diagnosticoDto.idFotografia());
             Recife recife = recifeRepository.getReferenceById(diagnosticoDto.idRecife());
-            Diagnostico diagnosticoCadastro = new Diagnostico(diagnosticoDto, fotografia, recife);
+
+            //Saude saude = iaIntegration.realizarDiagnostico(fotografia);
+
+            Diagnostico diagnosticoCadastro = new Diagnostico(saude, fotografia, recife);
             Diagnostico diagnostico = diagnosticoRepository.save(diagnosticoCadastro);
             return new DetalharDiagnosticoDTO(diagnostico);
         }catch (Exception e){

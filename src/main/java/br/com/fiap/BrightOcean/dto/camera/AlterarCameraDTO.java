@@ -2,11 +2,12 @@ package br.com.fiap.BrightOcean.dto.camera;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 public record AlterarCameraDTO(
-        @Min(3)
+        @Size(min = 3)
         String modeloCamera,
-        @Max(100)
+        @Size(min = 3, max = 100)
         String localizacao,
         Float latitude,
         Float longitude

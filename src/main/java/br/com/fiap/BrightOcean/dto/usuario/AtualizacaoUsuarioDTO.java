@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 public record AtualizacaoUsuarioDTO(
-        @Min(3)
+        @Size(min = 3)
         String nome,
         @Email(message = "Insira um e-mail válido")
         String email,

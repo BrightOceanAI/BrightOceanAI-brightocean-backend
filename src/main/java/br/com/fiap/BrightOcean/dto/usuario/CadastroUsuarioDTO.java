@@ -10,7 +10,7 @@ public record CadastroUsuarioDTO(
 
         @NotBlank
         @NotNull
-        @Min(3)
+        @Size(min = 3)
         String nome,
         @NotBlank
         @NotNull
