@@ -39,8 +39,8 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    public Page<Usuario> listarUsuarios(Pageable pageable){
-        Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+    public List<Usuario> listarUsuarios(){
+        List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios;
     }
 

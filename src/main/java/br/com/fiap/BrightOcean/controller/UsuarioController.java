@@ -5,6 +5,7 @@ import br.com.fiap.BrightOcean.dto.usuario.CadastroUsuarioDTO;
 import br.com.fiap.BrightOcean.dto.usuario.DetalhamentoUsuarioDTO;
 import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.model.Usuario;
+import br.com.fiap.BrightOcean.model.UsuarioModelAssembler;
 import br.com.fiap.BrightOcean.service.UsuarioService;
 import br.com.fiap.BrightOcean.util.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,25 @@ public class UsuarioController {
     private UsuarioService usuarioService;
     @Autowired
     private ErrorMessage error;
+
+    private final UsuarioModelAssembler assembler;
+
+    public UsuarioController(UsuarioService usuarioService, UsuarioModelAssembler assembler) {
+        this.usuarioService = usuarioService;
+        this.assembler = assembler;
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity buscarPorEmail(@PathVariable @Email String email) {
+        try {
+            Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
+            EntityModel<Usuario> usuarioModel = assembler.toModel(usuario);
+            return ResponseEntity.ok(usuarioModel);
+        } catch (BusinessException e) {
+            error.setError(e.getMessage());
+            return ResponseEntity.status(400).body(error);
+        }
+    }
 
 
     @Operation(summary = "Cadastra um usuário na base de dados", responses = {
@@ -54,12 +75,8 @@ public class UsuarioController {
             @ApiResponse(responseCode = "200", description = "Sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Usuario.class))))})
     @GetMapping
-    public ResponseEntity<Page<Usuario>> listar(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
-    ) {
-        Pageable pageable = Pageable.ofSize(size).withPage(page);
-        Page<Usuario> usuarios = usuarioService.listarUsuarios(pageable);
+    public ResponseEntity<List<Usuario>> listar() {
+        List<Usuario> usuarios = usuarioService.listarUsuarios();
         return ResponseEntity.status(200).body(usuarios);
     }
 
@@ -71,21 +88,6 @@ public class UsuarioController {
     public ResponseEntity buscarPorId(@PathVariable Long id){
         try {
             Usuario usuario = usuarioService.buscarUsuarioPorId(id);
-            return ResponseEntity.status(200).body(usuario);
-        }catch (BusinessException e){
-            error.setError(e.getMessage());
-            return ResponseEntity.status(400).body(error);
-        }
-    }
-
-    @Operation(summary = "Retorna um usuário na base de dados com base no id", responses = {
-            @ApiResponse(responseCode = "200", description = "Sucesso",
-                    content = @Content(schema = @Schema(implementation = Usuario.class))),
-            @ApiResponse(responseCode = "400", description = "Erro ao buscar usuário")})
-    @GetMapping("/email/{email}")
-    public ResponseEntity buscarPorEmail(@PathVariable @Email String email){
-        try {
-            Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
             return ResponseEntity.status(200).body(usuario);
         }catch (BusinessException e){
             error.setError(e.getMessage());

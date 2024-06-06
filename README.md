@@ -11,9 +11,10 @@ A entrega deve atender aos seguintes requisitos: <br/><br/>
 [x] Mapeamento de relacionamentos entre tabelas e pesquisas <br/>
 [x] Validação com Bean Validation <br/>
 [x] Paginação para recursos com muitos registros <br/>
-[ ] HATEOAS para atender ao Nível 3 de Maturidade proposto por Leonard Richardson <br/>
+[x] HATEOAS para atender ao Nível 3 de Maturidade proposto por Leonard Richardson <br/>
 [x] Tratamento adequado dos erros e exceptions <br/>
 [x] Documentação com SWAGGER <br/>
+[x] Utilização adequada dos verbos HTTP e códigos de status <br/>
 [ ] Deploy em nuvem <br/>
 [ ] Integração com modelo de Inteligência Artificial <br/>
-[x] Utilização adequada dos verbos HTTP e códigos de status <br/>
+
