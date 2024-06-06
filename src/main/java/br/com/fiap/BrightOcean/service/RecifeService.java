@@ -7,6 +7,8 @@ import br.com.fiap.BrightOcean.model.Recife;
 import br.com.fiap.BrightOcean.repository.DiagnosticoRepository;
 import br.com.fiap.BrightOcean.repository.RecifeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +30,8 @@ public class RecifeService {
         }
     }
 
-    public List<Recife> listarRecifes() {
-        return fecifeRepository.findAll();
+    public Page<Recife> listarRecifes(Pageable pageable) {
+        return fecifeRepository.findAll(pageable);
     }
 
     public Recife buscarRecifePorId(Long id) throws BusinessException {

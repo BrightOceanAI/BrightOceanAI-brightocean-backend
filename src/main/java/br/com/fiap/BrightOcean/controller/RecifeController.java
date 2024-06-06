@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +47,12 @@ public class RecifeController {
             @ApiResponse(responseCode = "200", description = "Sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Recife.class))))})
     @GetMapping
-    public ResponseEntity<List<Recife>> getAllRecifes() {
-        List<Recife> recifes = service.listarRecifes();
+    public ResponseEntity<Page<Recife>> getAllRecifes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Recife> recifes = service.listarRecifes(pageable);
         return new ResponseEntity<>(recifes, HttpStatus.OK);
     }
 

@@ -6,6 +6,8 @@ import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.model.Camera;
 import br.com.fiap.BrightOcean.repository.CameraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class CameraService {
         }
     }
 
-    public List<Camera> listarCameras() {
-        return cameraRepository.findAll();
+    public Page<Camera> listarCameras(Pageable pageable) {
+        return cameraRepository.findAll(pageable);
     }
 
     public Camera buscarCameraPorId(Long id) throws BusinessException {

@@ -10,7 +10,7 @@ A entrega deve atender aos seguintes requisitos: <br/><br/>
 [x] Persistência de dados com Spring Data JPA <br/>
 [x] Mapeamento de relacionamentos entre tabelas e pesquisas <br/>
 [x] Validação com Bean Validation <br/>
-[ ] Paginação para recursos com muitosregistros <br/>
+[x] Paginação para recursos com muitos registros <br/>
 [ ] HATEOAS para atender ao Nível 3 de Maturidade proposto por Leonard Richardson <br/>
 [x] Tratamento adequado dos erros e exceptions <br/>
 [x] Documentação com SWAGGER <br/>

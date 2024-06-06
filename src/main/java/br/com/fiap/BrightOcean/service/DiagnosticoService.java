@@ -11,6 +11,8 @@ import br.com.fiap.BrightOcean.repository.DiagnosticoRepository;
 import br.com.fiap.BrightOcean.repository.FotografiaRepository;
 import br.com.fiap.BrightOcean.repository.RecifeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +42,8 @@ public class DiagnosticoService {
         }
     }
 
-    public List<Diagnostico> listarDiagnosticos() {
-        return diagnosticoRepository.findAll();
+    public Page<Diagnostico> listarDiagnosticos(Pageable pageable) {
+        return diagnosticoRepository.findAll(pageable);
     }
 
     public Diagnostico buscarDiagnosticoPorId(Long id) throws BusinessException {

@@ -9,6 +9,8 @@ import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.model.Usuario;
 import br.com.fiap.BrightOcean.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,8 +39,8 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    public List<Usuario> listarUsuarios(){
-        List<Usuario> usuarios = usuarioRepository.findAll();
+    public Page<Usuario> listarUsuarios(Pageable pageable){
+        Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
         return usuarios;
     }
 

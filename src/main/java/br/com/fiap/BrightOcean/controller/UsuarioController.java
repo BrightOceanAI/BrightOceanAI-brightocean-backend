@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +54,12 @@ public class UsuarioController {
             @ApiResponse(responseCode = "200", description = "Sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Usuario.class))))})
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar(){
-        List<Usuario> usuarios = usuarioService.listarUsuarios();
+    public ResponseEntity<Page<Usuario>> listar(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Usuario> usuarios = usuarioService.listarUsuarios(pageable);
         return ResponseEntity.status(200).body(usuarios);
     }
 

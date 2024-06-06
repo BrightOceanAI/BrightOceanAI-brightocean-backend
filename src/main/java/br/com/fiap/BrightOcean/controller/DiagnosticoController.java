@@ -6,6 +6,7 @@ import br.com.fiap.BrightOcean.dto.diagnostico.DetalharDiagnosticoDTO;
 import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.model.Diagnostico;
 import br.com.fiap.BrightOcean.service.DiagnosticoService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,7 +14,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,10 +51,15 @@ public class DiagnosticoController {
             @ApiResponse(responseCode = "200", description = "Sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Diagnostico.class))))})
     @GetMapping
-    public ResponseEntity<List<Diagnostico>> getAllDiagnosticos() {
-        List<Diagnostico> diagnosticos = service.listarDiagnosticos();
+    public ResponseEntity<Page<Diagnostico>> getAllDiagnosticos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Diagnostico> diagnosticos = service.listarDiagnosticos(pageable);
         return new ResponseEntity<>(diagnosticos, HttpStatus.OK);
     }
+
 
     @Operation(summary = "Retorna um diagnostico da base de dados com base no id", responses = {
             @ApiResponse(responseCode = "200", description = "Sucesso",
