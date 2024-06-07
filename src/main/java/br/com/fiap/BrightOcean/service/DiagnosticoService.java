@@ -4,9 +4,11 @@ import br.com.fiap.BrightOcean.dto.diagnostico.AlterarDiagnosticoDTO;
 import br.com.fiap.BrightOcean.dto.diagnostico.CriarDiagnosticoDTO;
 import br.com.fiap.BrightOcean.dto.diagnostico.DetalharDiagnosticoDTO;
 import br.com.fiap.BrightOcean.exceptions.BusinessException;
+import br.com.fiap.BrightOcean.integration.DatascienceIntegration;
 import br.com.fiap.BrightOcean.model.Diagnostico;
 import br.com.fiap.BrightOcean.model.Fotografia;
 import br.com.fiap.BrightOcean.model.Recife;
+import br.com.fiap.BrightOcean.model.enums.Saude;
 import br.com.fiap.BrightOcean.repository.DiagnosticoRepository;
 import br.com.fiap.BrightOcean.repository.FotografiaRepository;
 import br.com.fiap.BrightOcean.repository.RecifeRepository;
@@ -28,13 +30,16 @@ public class DiagnosticoService {
     @Autowired
     private RecifeRepository recifeRepository;
 
+    @Autowired
+    private DatascienceIntegration datascienceIntegration;
+
 
     public DetalharDiagnosticoDTO criarDiagnostico(CriarDiagnosticoDTO diagnosticoDto) throws BusinessException {
         try {
             Fotografia fotografia = fotografiaRepository.getReferenceById(diagnosticoDto.idFotografia());
             Recife recife = recifeRepository.getReferenceById(diagnosticoDto.idRecife());
 
-            //Saude saude = iaIntegration.realizarDiagnostico(fotografia);
+            Saude saude = datascienceIntegration.realizarDiagnostico(fotografia);
 
             Diagnostico diagnosticoCadastro = new Diagnostico(saude, fotografia, recife);
             Diagnostico diagnostico = diagnosticoRepository.save(diagnosticoCadastro);
