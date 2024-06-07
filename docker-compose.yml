@@ -1,3 +1,8 @@
+### ATENÇÃO ####
+# AO USAR A VERSÃO 4.27.1 DO DOCKER DESKTOP
+# PRECISEI SETAR UMA VARIAVEL DE AMBIENTE DOCKER_BUILDKIT COM O VALOR 0 (SET DOCKER_BUILDKIT=0)
+# DEVIDO AO UM BUG DO DOCKER QUE FOI RESOLVIDO NAS ÚLTIMAS VERSÕES
+
 version: '3.8'
 
 services:
@@ -6,7 +11,7 @@ services:
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
+      MYSQL_DATABASE: brightocean_mysql
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     ports:
@@ -14,17 +19,19 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
-  brightocean-api:
-    build: .
+  brightocean-image:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: brightocean-api
-    environment:
-      SPRING_CONFIG_LOCATION: /app/application-docker.properties
     depends_on:
       - mysql
     ports:
       - "8080:8080"
-    volumes:
-      - ./application-docker.properties:/app/application-docker.properties
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/brightocean_mysql
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: mypassword
 
 volumes:
   mysql-data:
