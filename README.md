@@ -15,6 +15,6 @@ A entrega deve atender aos seguintes requisitos: <br/><br/>
 [x] Tratamento adequado dos erros e exceptions <br/>
 [x] Documentação com SWAGGER <br/>
 [x] Utilização adequada dos verbos HTTP e códigos de status <br/>
-[ ] Deploy em nuvem <br/>
+[X] Deploy em nuvem <br/>
 [ ] Integração com modelo de Inteligência Artificial <br/>
 
