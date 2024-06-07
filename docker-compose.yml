@@ -1,36 +1,30 @@
-version: "3"
+version: '3.8'
 
 services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
   brightocean-api:
-    container_name: brightocean-api
-    restart: always
     build: .
+    container_name: brightocean-api
+    environment:
+      SPRING_CONFIG_LOCATION: /app/application-docker.properties
+    depends_on:
+      - mysql
     ports:
       - "8080:8080"
-    environment:
-      # Update with your Oracle database connection details
-      DB_HOST: oracle-db
-      DB_PORT: 1521
-      DB_NAME: YOUR_ORACLE_SID
-      DB_USER: YOUR_ORACLE_USERNAME
-      DB_PASSWORD: YOUR_ORACLE_PASSWORD
-    networks:
-      - pgr_network
-
-  oracle-db:
-    image: store/oracle/database-enterprise  # Replace with desired version
-    restart: unless-stopped  # Adjust restart behavior as needed
-    ports:
-      - "1521:1521"  # Expose Oracle database port
     volumes:
-      - oracle-data:/opt/oracle/oradata  # Persistent storage for database files
-    environment:
-      # Refer to Oracle documentation for configuration options (e.g., ORACLE_SID, ORACLE_PDB)
-      ORACLE_SYSDBA: 'admin'  # Replace with strong password
-      # ... (other Oracle environment variables)
-
-networks:
-  pgr_network:
+      - ./application-docker.properties:/app/application-docker.properties
 
 volumes:
-  oracle-data:  # Persistent storage for Oracle database files
+  mysql-data:
