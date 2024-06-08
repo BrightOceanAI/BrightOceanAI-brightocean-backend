@@ -1,7 +1,7 @@
 package br.com.fiap.BrightOcean.service;
 
 import br.com.fiap.BrightOcean.dto.diagnostico.AlterarDiagnosticoDTO;
-import br.com.fiap.BrightOcean.dto.diagnostico.CriarDiagnosticoDTO;
+import br.com.fiap.BrightOcean.dto.diagnostico.EnviarDiagnosticoDTO;
 import br.com.fiap.BrightOcean.dto.diagnostico.DetalharDiagnosticoDTO;
 import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.integration.DatascienceIntegration;
@@ -17,7 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-    import java.util.Optional;
+import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class DiagnosticoService {
@@ -34,19 +35,13 @@ public class DiagnosticoService {
     private DatascienceIntegration datascienceIntegration;
 
 
-    public DetalharDiagnosticoDTO criarDiagnostico(CriarDiagnosticoDTO diagnosticoDto) throws BusinessException {
-        try {
-            Fotografia fotografia = fotografiaRepository.getReferenceById(diagnosticoDto.idFotografia());
-            Recife recife = recifeRepository.getReferenceById(diagnosticoDto.idRecife());
-
-            Saude saude = datascienceIntegration.realizarDiagnostico(fotografia);
-
-            Diagnostico diagnosticoCadastro = new Diagnostico(saude, fotografia, recife);
-            Diagnostico diagnostico = diagnosticoRepository.save(diagnosticoCadastro);
-            return new DetalharDiagnosticoDTO(diagnostico);
-        }catch (Exception e){
-            throw new BusinessException("Erro ao cadastrar");
-        }
+    public DetalharDiagnosticoDTO criarDiagnostico(Long idRecife, Long idFotografia) throws BusinessException, IOException {
+        Recife recife = recifeRepository.getReferenceById(idRecife);
+        Fotografia fotografia = fotografiaRepository.getReferenceById(idFotografia);
+        Saude saude = datascienceIntegration.realizarDiagnostico(fotografia);
+        Diagnostico diagnosticoCadastro = new Diagnostico(saude, fotografia, recife);
+        Diagnostico diagnostico = diagnosticoRepository.save(diagnosticoCadastro);
+        return new DetalharDiagnosticoDTO(diagnostico);
     }
 
     public Page<Diagnostico> listarDiagnosticos(Pageable pageable) {

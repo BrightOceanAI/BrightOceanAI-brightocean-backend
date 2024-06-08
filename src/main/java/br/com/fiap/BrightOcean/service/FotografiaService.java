@@ -6,10 +6,13 @@ import br.com.fiap.BrightOcean.dto.fotografia.AlterarFotografiaDTO;
 import br.com.fiap.BrightOcean.dto.fotografia.DetalharFotografiaDTO;
 import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.model.Camera;
+import br.com.fiap.BrightOcean.model.Diagnostico;
 import br.com.fiap.BrightOcean.model.Fotografia;
 import br.com.fiap.BrightOcean.repository.CameraRepository;
 import br.com.fiap.BrightOcean.repository.FotografiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,8 +42,8 @@ public class FotografiaService {
         }
     }
 
-    public List<Fotografia> listarFotografias() {
-        return fotografiaRepository.findAll();
+    public Page<Fotografia> listarfotografias(Pageable pageable) {
+        return fotografiaRepository.findAll(pageable);
     }
 
     public Fotografia buscarFotografiaPorId(Long id) throws BusinessException {

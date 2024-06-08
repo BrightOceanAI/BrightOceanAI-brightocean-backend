@@ -24,7 +24,7 @@ public class Recife {
     private boolean emRestauracao;
     private String estratgiaRestauracao;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "recife", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "recife", orphanRemoval = true)
     private List<Diagnostico> diagnosticos;
 
     public Recife(CriarRecifeDTO recifeDto) {

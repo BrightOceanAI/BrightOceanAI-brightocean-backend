@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +53,12 @@ public class FotografiaController {
             @ApiResponse(responseCode = "200", description = "Sucesso",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = Fotografia.class))))})
     @GetMapping
-    public ResponseEntity<List<Fotografia>> getAllFotografias() {
-        List<Fotografia> fotografias = service.listarFotografias();
+    public ResponseEntity<Page<Fotografia>> getAllFotografias(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        Page<Fotografia> fotografias = service.listarfotografias(pageable);
         return new ResponseEntity<>(fotografias, HttpStatus.OK);
     }
 

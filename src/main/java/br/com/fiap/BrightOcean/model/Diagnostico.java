@@ -1,7 +1,6 @@
 package br.com.fiap.BrightOcean.model;
 
 import br.com.fiap.BrightOcean.dto.diagnostico.AlterarDiagnosticoDTO;
-import br.com.fiap.BrightOcean.dto.diagnostico.CriarDiagnosticoDTO;
 import br.com.fiap.BrightOcean.model.enums.Saude;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

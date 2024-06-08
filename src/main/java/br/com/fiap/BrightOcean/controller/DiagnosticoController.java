@@ -1,12 +1,11 @@
 package br.com.fiap.BrightOcean.controller;
 
 import br.com.fiap.BrightOcean.dto.diagnostico.AlterarDiagnosticoDTO;
-import br.com.fiap.BrightOcean.dto.diagnostico.CriarDiagnosticoDTO;
+import br.com.fiap.BrightOcean.dto.diagnostico.EnviarDiagnosticoDTO;
 import br.com.fiap.BrightOcean.dto.diagnostico.DetalharDiagnosticoDTO;
 import br.com.fiap.BrightOcean.exceptions.BusinessException;
 import br.com.fiap.BrightOcean.model.Diagnostico;
 import br.com.fiap.BrightOcean.service.DiagnosticoService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,16 +13,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/diagnosticos")
@@ -32,14 +30,15 @@ public class DiagnosticoController {
     @Autowired
     private DiagnosticoService service;
 
-    @Operation(summary = "Cadastra um diagnostico na base de dados", responses = {
+    @Operation(summary = "Realiza um diagnostico na base de dados", responses = {
             @ApiResponse(responseCode = "201", description = "Sucesso",
                     content = @Content(schema = @Schema(implementation = Diagnostico.class))),
-            @ApiResponse(responseCode = "400", description = "Erro ao cadastrar fotografia")})
+            @ApiResponse(responseCode = "400", description = "Erro ao realizar diagnosticos")})
+    @Transactional
     @PostMapping
-    public ResponseEntity createDiagnostico(@RequestBody @Valid CriarDiagnosticoDTO diagnosticodto) {
+    public ResponseEntity realizarDiagnostico(@RequestParam Long idRecife, @RequestParam Long idFotografia) throws IOException {
         try {
-            DetalharDiagnosticoDTO createdDiagnostico = service.criarDiagnostico(diagnosticodto);
+            DetalharDiagnosticoDTO createdDiagnostico = service.criarDiagnostico(idRecife, idFotografia);
             return new ResponseEntity<>(createdDiagnostico, HttpStatus.CREATED);
         }catch (BusinessException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
